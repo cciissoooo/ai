@@ -1,40 +1,20 @@
-from models.chat import ChatManager
+from services.chat_service import ChatService
 
-def load_system_prompt(file_path: str) -> str:
-    """Load the system prompt from file."""
-    try:
-        with open(file_path, 'r') as f:
-            return f.read()
-    except Exception as e:
-        print(f"Error loading system prompt: {e}")
-        return "You are a helpful assistant."
+# Initialize the chat service
+chat_service = ChatService()
 
-# Load the system prompt
-system_prompt = load_system_prompt('data/system_prompt.txt')
+# Simulate a user ID
+user_id = "user123"
 
-# Initialize manager
-manager = ChatManager()
+# Create a new chat session
+chat_id = chat_service.create_chat(user_id)
+print(f"Chat session created with ID: {chat_id}")
 
-# Create a new chat
-user_id = "test_user"
-chat_id = "test_chat"
-manager.create_chat(user_id, chat_id, system_prompt)
+# Simulate sending a message
+user_message = "Hello, how are you?"
 
-# Add some messages
-messages = [
-    {"role": "user", "content": "Hello!"},
-    {"role": "assistant", "content": "Hi there!"},
-    {"role": "user", "content": "How are you?"},
-    {"role": "assistant", "content": "I'm just a program, but I'm here to help!"}
-]
-
-for message in messages:
-    manager.add_message(user_id, chat_id, message['role'], message['content'])
-
-conversation = manager.get_conversation(user_id, chat_id)
-
-print(f"Chat ID: {chat_id}\n")
-for message in conversation:
-    if message['role'] != 'system':  # Skip the system prompt
-        print(f"Role: {message['role']}") 
-        print(f"Message:\n{message['content']}\n")
+try:
+    ai_response = chat_service.process_message(user_id, chat_id, user_message)
+    print(f"AI Response: {ai_response}")
+except Exception as e:
+    print(f"Error: {e}")
