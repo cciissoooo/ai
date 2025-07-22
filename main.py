@@ -27,3 +27,14 @@ messages = [
     {"role": "user", "content": "How are you?"},
     {"role": "assistant", "content": "I'm just a program, but I'm here to help!"}
 ]
+
+for message in messages:
+    manager.add_message(user_id, chat_id, message['role'], message['content'])
+
+conversation = manager.get_conversation(user_id, chat_id)
+
+print(f"Chat ID: {chat_id}\n")
+for message in conversation:
+    if message['role'] != 'system':  # Skip the system prompt
+        print(f"Role: {message['role']}") 
+        print(f"Message:\n{message['content']}\n")
