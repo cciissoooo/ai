@@ -16,6 +16,11 @@ class ChatManager:
         """Get a chat by user_id and chat_id."""
         return self.chats.get(user_id, {}).get(chat_id)
 
+    def add_message(self, user_id, chat_id, role, content):
+        """Add a message to a chat."""
+        if chat := self.get_chat(user_id, chat_id):
+            chat['messages'].append({"role": role, "content": content})
+
     def get_conversation(self, user_id, chat_id):
         """Get the full conversation including system message."""
         if chat := self.get_chat(user_id, chat_id):
