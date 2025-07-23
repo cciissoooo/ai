@@ -1,5 +1,5 @@
 import uuid
-from flask import session
+from flask import session, request
 from services.chat_service import ChatService
 
 class ChatController:
@@ -23,20 +23,32 @@ class ChatController:
             'chat_id': chat_id,
             'message': 'Chat created successfully'
         }
-    
-    def send_message(self, chat_id, user_message):
+
+    def send_message(self):
         """Handle message sending request."""
+        # Retrieve the user_id from the session
         user_id = session.get('user_id')
+    
+        # Check if the session has expired (user_id is not present)
         if not user_id:
             return {'error': 'Session expired'}, 401
         
+        # Extract chat_id and user_message from the incoming JSON request
+        chat_id = request.json.get('chat_id')
+        user_message = request.json.get('message')
+        
+        # Check if chat_id or user_message is missing
         if not chat_id or not user_message:
             return {'error': 'Missing chat_id or message'}, 400
             
         try:
+            # Process the message using the ChatService and get the AI's response
             ai_response = self.chat_service.process_message(user_id, chat_id, user_message)
+            # Return the AI's response as a JSON object
             return {'message': ai_response}
         except ValueError as e:
+            # Handle specific error scenarios and return appropriate JSON responses
             return {'error': str(e)}, 404
         except RuntimeError as e:
             return {'error': str(e)}, 500
+
