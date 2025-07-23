@@ -1,5 +1,5 @@
 from flask import Flask
-from controllers.chat_controller import ChatController
+from controllers.chat_controller_with_flask import ChatController
 
 # Initialize the Flask application
 app = Flask(__name__)
@@ -20,3 +20,13 @@ def index():
 @app.route('/api/create_chat', methods=['POST'])
 def create_chat():
     return chat_controller.create_chat()
+
+# Define a route for sending a message in an existing chat session
+@app.route('/api/send_message', methods=['POST'])
+def send_message():
+    # Delegate the handling of a message to the chat controller
+    return chat_controller.send_message()
+    
+# Run the Flask application if this script is executed directly
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=3000)
