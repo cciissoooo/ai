@@ -8,6 +8,11 @@
         <h1>Welcome to Our Customer Service</h1>
         <p>How can we help you today?</p>
     </div>
+    <div class="suggestions">
+        <button class="suggestion-btn" onclick="usePrompt('What services do you offer?')">Our Services</button>
+        <button class="suggestion-btn" onclick="usePrompt('What are your business hours?')">Business Hours</button>
+        <button class="suggestion-btn" onclick="usePrompt('What is your contact email?')">Contact Email</button>
+    </div>
     <div id="chat-container">
         <div id="messages"></div>
         <div class="input-container">
@@ -107,6 +112,11 @@
                 sendMessage();
             }
         });
+
+        function usePrompt(prompt) {
+            messageInput.value = prompt;
+            sendMessage();
+        }
     </script>
 </body>
 </html>
