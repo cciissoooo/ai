@@ -20,17 +20,32 @@
     </div>
 
     <script>
+        // Initialize variables to store the current chat and user IDs
+        let currentChatId = null;
+        let currentUserId = null;
+        
         // Get references to the messages container and message input field
         const messagesContainer = document.getElementById('messages');
         const messageInput = document.getElementById('message-input');
 
+        function startNewChat() {
+            fetch('/api/create_chat', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                currentChatId = data.chat_id;
+                currentUserId = data.user_id;
+                // Clear the chat history
+                messagesContainer.innerHTML = '';
+            })
+            .catch(() => {
+                alert('Error creating chat');
+            });
+        }
+
         // Start a chat automatically when the page loads
         document.addEventListener('DOMContentLoaded', startNewChat);
-
-        function startNewChat() {
-            // Clear the chat history
-            messagesContainer.innerHTML = '';
-        }
         
         function appendMessage(role, content) {
             // Create a new div element for the message
@@ -62,10 +77,25 @@
             // Clear the input field after sending the message
             messageInput.value = '';
 
-            // For now, just echo the message back
-            setTimeout(() => {
-                appendMessage('assistant', `You said: ${message}`);
-            }, 500);
+           // Send message to API
+            fetch('/api/send_message', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    user_id: currentUserId,
+                    chat_id: currentChatId,
+                    message: message
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                appendMessage('assistant', data.message);
+            })
+            .catch(() => {
+                alert('Error sending message');
+            });
         }
 
         // Handle Enter key
