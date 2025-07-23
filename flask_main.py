@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from controllers.chat_controller_with_flask import ChatController
 
 # Initialize the Flask application
@@ -11,10 +11,11 @@ app.secret_key = 'your_secret_key_here'
 chat_controller = ChatController()
 
 # Define a route for the index page that ensures a user session
+# Initialize session and render chat interface
 @app.route('/')
 def index():
     chat_controller.ensure_user_session()
-    return "Welcome to the Chatbot Service!"
+    return render_template('chat.html')
 
 # Define a route for creating a new chat session
 @app.route('/api/create_chat', methods=['POST'])
