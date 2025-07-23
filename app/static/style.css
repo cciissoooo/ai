@@ -70,3 +70,36 @@ body {
 .assistant {
     text-align: left;
 }
+
+/* Use flexbox for input container with spacing */
+.input-container {
+    display: flex;
+    gap: 5px;
+    margin: 10px;
+}
+
+/* Allow input field to grow and fill available space */
+.input-wrapper {
+    flex-grow: 1;
+}
+
+/* Style message input field with full width, padding, and border */
+#message-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+}
+
+/* Style all buttons with padding, color, and background */
+button {
+    padding: 8px 16px;
+    color: #fff;
+    background: #1976d2;
+    border: none;
+    cursor: pointer;
+}
+
+/* Style new chat button with a specific background color */
+#new-chat-btn {
+    background: #2e7d32;
+}
